@@ -17,8 +17,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final String oldApkPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/eleme_5.12.1.apk";
-        final String newApkPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/eleme_5.12.2-patch.apk";
+        //files all are in tools/
+        final String oldApkPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/old.apk";
+        final String newApkPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/new.apk";
         final String patch = Environment.getExternalStorageDirectory().getAbsolutePath() + "/diff.apk";
 
         new Thread() {
@@ -27,13 +28,13 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 super.run();
                 Log.e(TAG, "start patch");
-                final int result = Patcher.patch(oldApkPath, newApkPath, patch);
+                final boolean result = Patcher.work(oldApkPath, newApkPath, patch);
                 Log.e(TAG, "end patch-->" + result);
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (result == 0) {
+                        if (result) {
                             Toast.makeText(MainActivity.this, "patch success-->" + newApkPath, Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(MainActivity.this, "sadly, patch fails", Toast.LENGTH_SHORT).show();
