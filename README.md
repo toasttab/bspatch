@@ -4,7 +4,7 @@
 ```java
 
 //dependency
-compile 'me.ele:bspatch:1.0.1'
+compile 'me.ele:bspatch:1.0.2'
 
 //simple as this, use the code in non-main thread
 boolean success = Patcher.work(oldApkPath, newApkPath, patch);
