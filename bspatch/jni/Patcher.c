@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <android/log.h>
 
-JNIEXPORT jint JNICALL Java_me_ele_bspatch_Patcher_patch(JNIEnv* env,
+JNIEXPORT jint JNICALL Java_me_ele_patch_BsPatch_patch(JNIEnv* env,
 		jobject othis, jstring argv1, jstring argv2, jstring argv3) {
 	char ** argv;
 	int loopVar,result;

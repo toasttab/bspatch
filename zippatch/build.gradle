@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -18,20 +18,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
-    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'me.ele:bspatch:1.0.3'
 }
 
+
 def GROUP = 'me.ele'
-def ARTIFACTID = 'bspatch'
+def ARTIFACTID = 'zippatch'
 
 group = GROUP
 version = VERSION
@@ -102,4 +98,5 @@ artifacts {
     archives javadocJar
     archives sourcesJar
 }
+
 
