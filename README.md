@@ -3,11 +3,19 @@
 
 ```java
 
-//dependency
-compile 'me.ele:bspatch:1.0.2'
+//the bspatch of the whole zip
+compile 'me.ele:bspatch:1.0.3'
 
 //simple as this, use the code in non-main thread
-boolean success = Patcher.work(oldApkPath, newApkPath, patch);
+boolean success = BsPatch.workSync(oldApkPath, newApkPath, patchApkPath);
+BsPatch.workAsync(oldApkPath, newApkPath, patchApkPath, listener);
+
+
+//the bspatch for each file in zip file
+compile 'me.ele:zippatch:1.0.3'
+
+ZipPatch.patchSync(oldApk, newApk, patchApk)
+ZipPatch.patchAsync(oldApk, newApk, patchApk, listener)
 ```
 
 ## Tools for diff & patch 
@@ -19,11 +27,7 @@ this cli may be used in server side
  bsdiff oldfile newfile patchfile
 ```
 
-you may want to check whether diff&patch works, use bspatch for verification
-
-```shell
-bspatch oldfile newfile patchfile
-```
+if you want to use **zippatch**, generate patch file follow the [zippatch_server](https://github.com/eleme/bspatch/tree/master/zippatch_server)
 
 ### notice
 

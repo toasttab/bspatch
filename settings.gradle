@@ -1,1 +1,1 @@
-include ':app', ':bspatch'
+include ':app', ':bspatch', ':zippatch', ':zippatch_server'

@@ -5,12 +5,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*
- * Class:     com.dodola.patcher.utils.AppUtils
- * Method:    patcher
- * Signature: ()V
- */
-JNIEXPORT jint JNICALL Java_me_ele_bspatch_Patcher_patch
+
+JNIEXPORT jint JNICALL Java_me_ele_patch_BsPatch_patch
   (JNIEnv *, jobject, jstring argv1, jstring argv2, jstring argv3);
 
 #ifdef __cplusplus

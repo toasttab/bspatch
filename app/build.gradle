@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.1'
 
     compile project(':bspatch')
+    compile project(':zippatch')
 }
