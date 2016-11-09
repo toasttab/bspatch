@@ -1,14 +1,38 @@
 package me.ele.patch;
 
+import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
 
 import java.io.File;
+import java.lang.reflect.Method;
 
 public class BsPatch {
 
     static {
-        System.loadLibrary("Patcher");
+        try {
+            System.loadLibrary("Patcher");
+        } catch (Throwable e) {
+            try {
+                Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
+                Method method = activityThreadClass.getMethod("currentApplication");
+                Application context = (Application) method.invoke(null, (Object[]) null);
+                String libraryPath = context.getFilesDir().getParentFile().getPath() + "/lib";
+                System.load(libraryPath + "/libPatcher.so");
+            } catch (Exception e1) {
+                try {
+                    Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
+                    Method method = activityThreadClass.getDeclaredMethod("currentActivityThread");
+                    Object activityThread = method.invoke(null);
+                    Method getApplicationMethod = activityThreadClass.getDeclaredMethod("getApplication");
+                    Application context = (Application) getApplicationMethod.invoke(activityThread);
+                    String libraryPath = context.getFilesDir().getParentFile().getPath() + "/lib";
+                    System.load(libraryPath + "/libPatcher.so");
+                } catch (Exception e2) {
+                    throw new RuntimeException(e2);
+                }
+            }
+        }
     }
 
     /**
