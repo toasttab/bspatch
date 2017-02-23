@@ -2,7 +2,6 @@ package me.ele.zip;
 
 import android.os.Handler;
 import android.os.Looper;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,7 +16,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-
 import me.ele.patch.BsPatch;
 
 public class ZipPatch {
@@ -48,9 +46,10 @@ public class ZipPatch {
             final File oldChild = new File(sourceDir, component);
             final File dstChild = new File(dstDir, component);
             if (diffChild.exists() && oldChild.exists()) {
-                BsPatch.workSync(oldChild.getCanonicalPath(), dstChild.getCanonicalPath(),
-                        diffChild.getCanonicalPath());
-
+                boolean success = BsPatch.workSync(oldChild.getCanonicalPath(), dstChild.getCanonicalPath(), diffChild.getCanonicalPath());
+                if (!success) {
+                    throw new RuntimeException(String.format("BsPatch fails to patch %s %s", oldChild, diffChild));
+                }
             } else if (diffChild.exists()) {
                 copyFile(diffChild, dstChild);
             } else {

@@ -1,38 +1,41 @@
 package me.ele.patch;
 
-import android.app.Application;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-
+import android.util.Log;
+import com.getkeepsafe.relinker.ReLinker;
 import java.io.File;
-import java.lang.reflect.Method;
+
 
 public class BsPatch {
 
-    static {
-        try {
-            System.loadLibrary("Patcher");
-        } catch (Throwable e) {
-            try {
-                Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
-                Method method = activityThreadClass.getMethod("currentApplication");
-                Application context = (Application) method.invoke(null, (Object[]) null);
-                String libraryPath = context.getFilesDir().getParentFile().getPath() + "/lib";
-                System.load(libraryPath + "/libPatcher.so");
-            } catch (Exception e1) {
-                try {
-                    Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
-                    Method method = activityThreadClass.getDeclaredMethod("currentActivityThread");
-                    Object activityThread = method.invoke(null);
-                    Method getApplicationMethod = activityThreadClass.getDeclaredMethod("getApplication");
-                    Application context = (Application) getApplicationMethod.invoke(activityThread);
-                    String libraryPath = context.getFilesDir().getParentFile().getPath() + "/lib";
-                    System.load(libraryPath + "/libPatcher.so");
-                } catch (Exception e2) {
-                    throw new RuntimeException(e2);
-                }
-            }
+    private static final String TAG = BsPatch.class.getSimpleName();
+
+    private static boolean isInitialized = false;
+    private static boolean isFailure = false;
+
+    public static void init(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("param context cannot be null");
         }
+
+      if (isInitialized) {
+        Log.d(TAG, "initialization shall not be done twice");
+        return;
+      }
+
+        ReLinker.loadLibrary(context.getApplicationContext(), "Patcher",
+            new ReLinker.LoadListener() {
+                @Override public void success() {
+
+                }
+
+                @Override public void failure(Throwable t) {
+                    isFailure = true;
+                }
+            });
+      isInitialized = true;
     }
 
     /**
@@ -46,6 +49,15 @@ public class BsPatch {
     private static native int patch(String oldPath, String newPath, String patchPath);
 
     public static boolean workSync(String oldPath, String newPath, String patchPath) {
+
+      if (!isInitialized) {
+        throw new RuntimeException("call BsPatch.init(context) first");
+      }
+
+      if (isFailure) {
+        Log.e(TAG, "loading libPatcher.so fails, so no further more");
+        return false;
+      }
 
         //check oldApkFile's existence and readability
         File oldApkFile = new File(oldPath);
@@ -99,6 +111,15 @@ public class BsPatch {
 
     public static void workAsync(final String oldPath, final String newPath, final String patchPath,
                                  final BsPatchListener listener) {
+      if (!isInitialized) {
+        throw new RuntimeException("call BsPatch.init(context) first");
+      }
+
+      if (isFailure) {
+        Log.e(TAG, "loading libPatcher.so fails, so no further more");
+        return;
+      }
+
         new Thread() {
             @Override
             public void run() {
