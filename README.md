@@ -4,7 +4,10 @@
 ```java
 
 //the bspatch of the whole zip
-compile 'me.ele:bspatch:1.0.4'
+compile 'me.ele:bspatch:1.0.6'
+
+//do anything first, you must call this
+BsPatch.init(context)
 
 //simple as this, use the code in non-main thread
 boolean success = BsPatch.workSync(oldApkPath, newApkPath, patchApkPath);
@@ -12,14 +15,14 @@ BsPatch.workAsync(oldApkPath, newApkPath, patchApkPath, listener);
 
 
 //the bspatch for each file in zip file
-compile 'me.ele:zippatch:1.0.4'
+compile 'me.ele:zippatch:1.0.6'
 
 ZipPatch.patchSync(oldApk, newApk, patchApk)
 ZipPatch.patchAsync(oldApk, newApk, patchApk, listener)
 ```
 
 # Compatibility
-- support from FROYO `2.2`
+- support from FROYO `2.3`
 
 ## Tools for diff & patch 
 
