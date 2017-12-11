@@ -21,8 +21,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'me.ele:bspatch:1.0.6'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'me.ele:bspatch:1.0.6'
 //    compile project(':bspatch')
 }
 
