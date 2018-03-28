@@ -38,6 +38,10 @@ public class BsPatch {
       isInitialized = true;
     }
 
+    public static boolean isInitialized() {
+        return isInitialized;
+    }
+
     /**
      * 调用.so库中的方法,合并apk
      *
